@@ -39,12 +39,19 @@ apt-get install -y kubelet kubeadm kubectl
 docker info | grep -i cgroup
 cat /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
-## Update cgroup driver from systemd to cgroupfs
-sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+## Update cgroup driver to systemd
+sed -i "s/\$KUBELET_EXTRA_ARGS/\$KUBELET_EXTRA_ARGS\ --cgroup-driver=systemd/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+cat <<EOF >/etc/docker/daemon.json
+{
+	"exec-opts": ["native.cgroupdriver=systemd"]
+}
+EOF
 
 ## Restart kubelet
 systemctl daemon-reload
 systemctl restart kubelet
+systemctl restart docker
 
 
 ## Disable Swap in Ubuntu
