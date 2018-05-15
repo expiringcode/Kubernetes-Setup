@@ -44,4 +44,4 @@ kubectl config --kubeconfig=kube-config/config-cluster set-credentials developer
 kubectl config --kubeconfig=kube-config/config-cluster set-context development --cluster=development --namespace=development --user=developer
 
 # View configuration
-kubectl config --kubeconfig=config-cluster view
+kubectl config --kubeconfig=kube-config/config-cluster view
